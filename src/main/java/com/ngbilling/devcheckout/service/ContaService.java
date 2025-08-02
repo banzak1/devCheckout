@@ -19,16 +19,15 @@ public class ContaService {
     }
 
     public ResponseEntity<ContaDTO> criaConta(@RequestBody ContaDTO contaDTO) {
-        Optional<Conta> contaExistente = contaRepository.findByNumeroConta(contaDTO.numeroConta);
+        Optional<Conta> contaExistente = contaRepository.findByNumeroConta(contaDTO.numeroConta());
         if (contaExistente.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(contaDTO);
         }
 
         Conta conta = new Conta();
-        conta.setNumeroConta(contaDTO.numeroConta);
-        conta.setSaldo(contaDTO.saldo);
+        conta.setNumeroConta(contaDTO.numeroConta());
+        conta.setSaldo(contaDTO.saldo());
 
-        Conta saldo = contaRepository.save(conta);
         ContaDTO responseDTO = new ContaDTO(
                 conta.getNumeroConta(),
                 conta.getSaldo()
