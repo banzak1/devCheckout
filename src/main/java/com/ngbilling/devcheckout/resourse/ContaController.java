@@ -1,26 +1,27 @@
 package com.ngbilling.devcheckout.resourse;
 
-import com.ngbilling.devcheckout.model.Conta;
-import com.ngbilling.devcheckout.repository.ContaRepository;
+import com.ngbilling.devcheckout.DTO.ContaDTO;
+import com.ngbilling.devcheckout.service.ContaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/conta")
+@RestController
+@RequestMapping("/conta")
 public class ContaController {
 
-    private final ContaRepository repository;
+    private final ContaService contaService;
 
-    public ContaController(ContaRepository repository) {
-        this.repository = repository;
+    public ContaController(ContaService contaService) {
+        this.contaService = contaService;
     }
-
 
     @PostMapping
-    Conta criarConta(@RequestBody Conta conta){
-        return repository.save(conta);
+    public ResponseEntity<ContaDTO> salvarConta(@RequestBody ContaDTO contaDTO) {
+        return contaService.criaConta(contaDTO);
     }
 
-    @GetMapping("/numeroConta/{id}")
-    Conta mostrarConta(@PathVariable Long id){
-        return repository.findById(id).get();
+    @GetMapping
+    public ResponseEntity<ContaDTO> buscarPorNumeroConta(@RequestParam Integer numeroConta){
+        return contaService.buscarConta(numeroConta);
     }
 }
