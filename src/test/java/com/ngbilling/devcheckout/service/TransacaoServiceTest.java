@@ -78,9 +78,7 @@ public class TransacaoServiceTest {
     void emitirExcecaoParaFormaPagamentoInvalida() {
         TransacaoDTO dto = new TransacaoDTO("X", 123, new BigDecimal("10.00"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            transacaoService.calculaTaxa(dto.formaPagamento(), dto.valor());
-        });
+        assertThrows(IllegalArgumentException.class, () -> transacaoService.calculaTaxa(dto.formaPagamento(), dto.valor()));
     }
 }
 
