@@ -21,7 +21,7 @@ public class TransacaoService {
         this.contaRepository = contaRepository;
     }
 
-    public ResponseEntity<Conta> efetuaPagamento(@RequestBody TransacaoDTO transacaoDTO) {
+    public ResponseEntity<Conta> efetuaPagamento(TransacaoDTO transacaoDTO) {
         Optional<Conta> contaExiste  = contaRepository.findByNumeroConta(transacaoDTO.numeroConta());
         if (contaExiste.isPresent()) {
             Conta conta = contaExiste.get();
