@@ -6,7 +6,6 @@ import com.ngbilling.devcheckout.repository.ContaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -18,7 +17,7 @@ public class ContaService {
         this.contaRepository = contaRepository;
     }
 
-    public ResponseEntity<ContaDTO> criaConta(@RequestBody ContaDTO contaDTO) {
+    public ResponseEntity<ContaDTO> criaConta(ContaDTO contaDTO) {
         Optional<Conta> contaExistente = contaRepository.findByNumeroConta(contaDTO.numeroConta());
         if (contaExistente.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(contaDTO);
@@ -28,9 +27,11 @@ public class ContaService {
         conta.setNumeroConta(contaDTO.numeroConta());
         conta.setSaldo(contaDTO.saldo());
 
+        Conta contaCriada = contaRepository.save(conta);
+
         ContaDTO responseDTO = new ContaDTO(
-                conta.getNumeroConta(),
-                conta.getSaldo()
+                contaCriada.getNumeroConta(),
+                contaCriada.getSaldo()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
