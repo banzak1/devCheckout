@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class ContaServiceTest {
         ContaDTO contaDTO = new ContaDTO(111, new BigDecimal("100.00"));
 
         when(contaRepository.findByNumeroConta(111)).thenReturn(Optional.empty());
+        when(contaRepository.save(Mockito.any(Conta.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         ResponseEntity<ContaDTO> response = contaService.criaConta(contaDTO);
 
