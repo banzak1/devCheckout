@@ -49,6 +49,42 @@ public class TransacaoServiceTest {
     }
 
     @Test
+    void efetuarDebitoComSucesso() {
+        Conta conta = new Conta();
+        conta.setNumeroConta(123);
+        conta.setSaldo(new BigDecimal("100.00"));
+
+        when(contaRepository.findByNumeroConta(123)).thenReturn(Optional.of(conta));
+        when(contaRepository.save(any(Conta.class))).thenReturn(conta);
+
+        TransacaoDTO dto = new TransacaoDTO("D", 123, new BigDecimal("50.00"));
+
+        ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
+
+        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
+        assertNotNull(resposta.getBody());
+        assertEquals(0, resposta.getBody().getSaldo().compareTo(new BigDecimal("48.50")));
+    }
+
+    @Test
+    void efetuarCreditoComSucesso() {
+        Conta conta = new Conta();
+        conta.setNumeroConta(123);
+        conta.setSaldo(new BigDecimal("100.00"));
+
+        when(contaRepository.findByNumeroConta(123)).thenReturn(Optional.of(conta));
+        when(contaRepository.save(any(Conta.class))).thenReturn(conta);
+
+        TransacaoDTO dto = new TransacaoDTO("C", 123, new BigDecimal("50.00"));
+
+        ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
+
+        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
+        assertNotNull(resposta.getBody());
+        assertEquals(0, resposta.getBody().getSaldo().compareTo(new BigDecimal("47.50")));
+    }
+
+    @Test
     void recusarTransacaoComSaldoInsuficiente() {
         Conta conta = new Conta();
         conta.setNumeroConta(123);
