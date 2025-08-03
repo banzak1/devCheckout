@@ -2,6 +2,7 @@ package com.ngbilling.devcheckout.resourse;
 
 import com.ngbilling.devcheckout.DTO.ContaDTO;
 import com.ngbilling.devcheckout.service.ContaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class ContaController {
     }
 
     @PostMapping
-    public ResponseEntity<ContaDTO> salvarConta(@RequestBody ContaDTO contaDTO) {
+    public ResponseEntity<ContaDTO> salvarConta(@Valid @RequestBody ContaDTO contaDTO) {
         return contaService.criaConta(contaDTO);
     }
 
