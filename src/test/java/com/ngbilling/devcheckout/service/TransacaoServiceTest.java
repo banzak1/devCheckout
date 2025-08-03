@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
@@ -42,7 +43,7 @@ public class TransacaoServiceTest {
 
         ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
 
-        assertEquals(201, resposta.getStatusCodeValue());
+        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
         assertNotNull(resposta.getBody());
         assertEquals(new BigDecimal("50.00"), resposta.getBody().getSaldo());
     }
@@ -59,7 +60,7 @@ public class TransacaoServiceTest {
 
         ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
 
-        assertEquals(404, resposta.getStatusCodeValue());
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class TransacaoServiceTest {
 
         ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
 
-        assertEquals(404, resposta.getStatusCodeValue());
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
     }
 
     @Test
