@@ -6,10 +6,8 @@ import com.ngbilling.devcheckout.repository.ContaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Optional;
 
 @Service
@@ -43,15 +41,11 @@ public class TransacaoService {
     }
 
     public BigDecimal calculaTaxa(String formaPagamento, BigDecimal valor) {
-        switch (formaPagamento){
-            case "D":
-                return valor.multiply(BigDecimal.valueOf(0.03));
-            case "C":
-                return valor.multiply(BigDecimal.valueOf(0.05));
-            case "P":
-                return BigDecimal.ZERO;
-            default:
-                throw new IllegalArgumentException("FormaPagamento invalido: " + formaPagamento );
-        }
+        return switch (formaPagamento) {
+            case "D" -> valor.multiply(BigDecimal.valueOf(0.03));
+            case "C" -> valor.multiply(BigDecimal.valueOf(0.05));
+            case "P" -> BigDecimal.ZERO;
+            default -> throw new IllegalArgumentException("FormaPagamento invalido: " + formaPagamento);
+        };
     }
 }
