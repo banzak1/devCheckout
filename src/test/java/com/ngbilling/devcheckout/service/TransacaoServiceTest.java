@@ -1,6 +1,8 @@
 package com.ngbilling.devcheckout.service;
 
+import com.ngbilling.devcheckout.DTO.ContaDTO;
 import com.ngbilling.devcheckout.DTO.TransacaoDTO;
+import com.ngbilling.devcheckout.Exceptions.ContaNaoEncontradaException;
 import com.ngbilling.devcheckout.model.Conta;
 import com.ngbilling.devcheckout.repository.ContaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -41,11 +42,10 @@ public class TransacaoServiceTest {
 
         TransacaoDTO dto = new TransacaoDTO("P", 123, new BigDecimal("50.00"));
 
-        ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
+        ContaDTO resposta = transacaoService.efetuaPagamento(dto);
 
-        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
-        assertNotNull(resposta.getBody());
-        assertEquals(new BigDecimal("50.00"), resposta.getBody().getSaldo());
+        assertNotNull(resposta);
+        assertEquals(new BigDecimal("50.00"), resposta.getSaldo());
     }
 
     @Test
@@ -59,11 +59,10 @@ public class TransacaoServiceTest {
 
         TransacaoDTO dto = new TransacaoDTO("D", 123, new BigDecimal("50.00"));
 
-        ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
-
-        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
-        assertNotNull(resposta.getBody());
-        assertEquals(0, resposta.getBody().getSaldo().compareTo(new BigDecimal("48.50")));
+        ContaDTO resposta = transacaoService.efetuaPagamento(dto);
+        ;
+        assertNotNull(resposta);
+        assertEquals(0, resposta.getSaldo().compareTo(new BigDecimal("48.50")));
     }
 
     @Test
@@ -77,11 +76,10 @@ public class TransacaoServiceTest {
 
         TransacaoDTO dto = new TransacaoDTO("C", 123, new BigDecimal("50.00"));
 
-        ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
+        ContaDTO resposta = transacaoService.efetuaPagamento(dto);
 
-        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
-        assertNotNull(resposta.getBody());
-        assertEquals(0, resposta.getBody().getSaldo().compareTo(new BigDecimal("47.50")));
+        assertNotNull(resposta);
+        assertEquals(0, resposta.getSaldo().compareTo(new BigDecimal("47.50")));
     }
 
     @Test
@@ -94,9 +92,9 @@ public class TransacaoServiceTest {
 
         TransacaoDTO dto = new TransacaoDTO("C", 123, new BigDecimal("20.00"));
 
-        ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
+        ContaDTO resposta = transacaoService.efetuaPagamento(dto);
 
-        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+        assertEquals(conta.getSaldo(), resposta.getSaldo());
     }
 
     @Test
@@ -105,9 +103,7 @@ public class TransacaoServiceTest {
 
         when(contaRepository.findByNumeroConta(999)).thenReturn(Optional.empty());
 
-        ResponseEntity<Conta> resposta = transacaoService.efetuaPagamento(dto);
-
-        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+        assertThrows(ContaNaoEncontradaException.class, ()-> transacaoService.efetuaPagamento(dto));
     }
 
     @Test

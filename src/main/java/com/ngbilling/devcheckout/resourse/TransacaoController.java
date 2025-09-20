@@ -1,5 +1,6 @@
 package com.ngbilling.devcheckout.resourse;
 
+import com.ngbilling.devcheckout.DTO.ContaDTO;
 import com.ngbilling.devcheckout.DTO.TransacaoDTO;
 import com.ngbilling.devcheckout.model.Conta;
 import com.ngbilling.devcheckout.service.TransacaoService;
@@ -18,7 +19,7 @@ public class TransacaoController {
     }
 
     @PostMapping("/transacao")
-    public ResponseEntity<Conta> efetuarTransacao(@RequestBody TransacaoDTO transacaoDTO) {
+    public ContaDTO efetuarTransacao(@RequestBody TransacaoDTO transacaoDTO) {
         return transacaoService.efetuaPagamento(transacaoDTO);
     }
 }
