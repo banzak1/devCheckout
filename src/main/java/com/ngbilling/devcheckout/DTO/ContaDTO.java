@@ -1,6 +1,7 @@
 package com.ngbilling.devcheckout.DTO;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class ContaDTO{
+    @JsonIgnore
     private Long id;
     @JsonProperty("numero_conta")
     private Integer numeroConta;
