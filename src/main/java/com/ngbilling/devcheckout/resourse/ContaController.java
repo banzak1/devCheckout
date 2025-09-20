@@ -17,12 +17,12 @@ public class ContaController {
     }
 
     @PostMapping
-    public ResponseEntity<ContaDTO> salvarConta(@Valid @RequestBody ContaDTO contaDTO) {
+    public ContaDTO salvarConta(@Valid @RequestBody ContaDTO contaDTO) {
         return contaService.criaConta(contaDTO);
     }
 
     @GetMapping
-    public ResponseEntity<ContaDTO> buscarPorNumeroConta(@RequestParam Integer numeroConta){
+    public ContaDTO buscarPorNumeroConta(@RequestParam Integer numeroConta){
         return contaService.buscarConta(numeroConta);
     }
 }

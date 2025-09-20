@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,11 +36,11 @@ public class ContaServiceTest {
         when(contaRepository.findByNumeroConta(111)).thenReturn(Optional.empty());
         when(contaRepository.save(Mockito.any(Conta.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<ContaDTO> response = contaService.criaConta(contaDTO);
+        ContaDTO response = contaService.criaConta(contaDTO);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
-        assertEquals(contaDTO.numeroConta(), response.getBody().numeroConta());
+        assertNotNull(response);
+        assertEquals(contaDTO.getNumeroConta(), response.getNumeroConta());
+        assertEquals(contaDTO.getSaldo(), response.getSaldo());
     }
 
     @Test
@@ -50,9 +51,11 @@ public class ContaServiceTest {
 
         when(contaRepository.findByNumeroConta(123)).thenReturn(Optional.of(contaExistente));
 
-        ResponseEntity<ContaDTO> resposta = contaService.criaConta(dto);
+        ContaDTO resposta = contaService.criaConta(dto);
 
-        assertEquals(HttpStatus.CONFLICT, resposta.getStatusCode());
+        assertNotNull(resposta);
+        assertEquals(dto.getNumeroConta(), resposta.getNumeroConta());
+        assertEquals(dto.getSaldo(), resposta.getSaldo());
     }
 
 }

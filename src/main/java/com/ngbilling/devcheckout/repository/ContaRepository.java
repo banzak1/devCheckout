@@ -1,5 +1,6 @@
 package com.ngbilling.devcheckout.repository;
 
+import com.ngbilling.devcheckout.DTO.ContaDTO;
 import com.ngbilling.devcheckout.model.Conta;
 import org.springframework.data.jpa.repository.JpaRepository;
 

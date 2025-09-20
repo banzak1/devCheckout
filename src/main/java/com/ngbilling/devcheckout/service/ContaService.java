@@ -1,6 +1,7 @@
 package com.ngbilling.devcheckout.service;
 
 import com.ngbilling.devcheckout.DTO.ContaDTO;
+import com.ngbilling.devcheckout.Exceptions.ContaJaExistenteException;
 import com.ngbilling.devcheckout.model.Conta;
 import com.ngbilling.devcheckout.repository.ContaRepository;
 import org.springframework.http.HttpStatus;
@@ -17,31 +18,26 @@ public class ContaService {
         this.contaRepository = contaRepository;
     }
 
-    public ResponseEntity<ContaDTO> criaConta(ContaDTO contaDTO) {
-        Optional<Conta> contaExistente = contaRepository.findByNumeroConta(contaDTO.numeroConta());
+    public ContaDTO criaConta(ContaDTO contaDTO) {
+        Optional<Conta> contaExistente = contaRepository.findByNumeroConta(contaDTO.getNumeroConta());
         if (contaExistente.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(contaDTO);
-        }
+            throw new ContaJaExistenteException("Conta com número " + contaDTO.getNumeroConta() + " já existe");
 
+        }
         Conta conta = new Conta();
-        conta.setNumeroConta(contaDTO.numeroConta());
-        conta.setSaldo(contaDTO.saldo());
+        conta.setNumeroConta(contaDTO.getNumeroConta());
+        conta.setSaldo(contaDTO.getSaldo());
 
         Conta contaCriada = contaRepository.save(conta);
 
-        ContaDTO responseDTO = new ContaDTO(
-                contaCriada.getNumeroConta(),
-                contaCriada.getSaldo()
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        return new ContaDTO(contaCriada.getNumeroConta(), contaCriada.getSaldo());
     }
 
-    public ResponseEntity<ContaDTO> buscarConta(Integer numeroConta) {
+    public ContaDTO buscarConta(Integer numeroConta) {
         return contaRepository.findByNumeroConta(numeroConta)
                 .map(conta -> new ContaDTO(conta.getNumeroConta(), conta.getSaldo()))
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build()).getBody();
     }
 }
 

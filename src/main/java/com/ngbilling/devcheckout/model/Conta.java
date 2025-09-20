@@ -2,6 +2,8 @@ package com.ngbilling.devcheckout.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
+
 import java.math.BigDecimal;
 
 @Data
