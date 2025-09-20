@@ -18,6 +18,7 @@ public class ContaDTO{
     private Integer numeroConta;
     private BigDecimal saldo;
 
+
     public ContaDTO() {}
 
     public ContaDTO(Long id, Integer numeroConta, BigDecimal saldo) {
@@ -27,6 +28,8 @@ public class ContaDTO{
     }
 
     public ContaDTO(Integer numeroConta, BigDecimal saldo) {
+        this.numeroConta = numeroConta;
+        this.saldo = saldo;
     }
 }
 
